@@ -1,0 +1,51 @@
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-[#1a237e];
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground font-poppins;
+  }
+
+  h1 {
+    font-family: 'Poppins', system-ui;
+    letter-spacing: 0.05em;
+  }
+
+  .quiz-question {
+    font-family: 'Poppins', system-ui;
+    letter-spacing: 0.03em;
+  }
+
+  .quiz-option {
+    font-family: 'Poppins', system-ui;
+    letter-spacing: 0.02em;
+  }
+}
+
+@keyframes moveArrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.arrow-animation {
+  animation: moveArrow 1s ease-in-out infinite;
+}
