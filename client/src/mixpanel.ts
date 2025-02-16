@@ -9,8 +9,10 @@ export const MIXPANEL_EVENTS = {
   TY_POPUP_CLICKED: 'personality_ty_popup_clicked'
 } as const;
 
-// Get Mixpanel token from environment variables
-const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN_DEV;
+// Get Mixpanel token from environment variables based on mode
+const MIXPANEL_TOKEN = import.meta.env.MODE === 'production' 
+  ? import.meta.env.VITE_MIXPANEL_TOKEN_PROD
+  : import.meta.env.VITE_MIXPANEL_TOKEN_DEV;
 
 // Track initialization status
 let isInitialized = false;
@@ -20,7 +22,7 @@ if (MIXPANEL_TOKEN) {
   try {
     // Initialize Mixpanel
     mixpanel.init(MIXPANEL_TOKEN, {
-      debug: true, // Always enable debug mode for development
+      debug: import.meta.env.MODE !== 'production', // Only enable debug in non-production
       track_pageview: true,
       persistence: 'localStorage',
       ignore_dnt: true
@@ -30,14 +32,14 @@ if (MIXPANEL_TOKEN) {
     mixpanel.register({
       app_version: '1.0.0',
       platform: 'web',
-      environment: 'development',
+      environment: import.meta.env.MODE,
       viewport_width: window.innerWidth,
       viewport_height: window.innerHeight,
       language: navigator.language
     });
 
     isInitialized = true;
-    console.log('✅ Mixpanel initialized in development mode with token:', MIXPANEL_TOKEN);
+    console.log('✅ Mixpanel initialized in ' + import.meta.env.MODE + ' mode with token:', MIXPANEL_TOKEN);
   } catch (error) {
     console.error('❌ Failed to initialize Mixpanel:', error);
   }
@@ -65,7 +67,7 @@ export const mp = {
 
     try {
       mixpanel.track(eventName, {
-        environment: 'development',
+        environment: import.meta.env.MODE,
         ...properties
       });
       console.log('✅ Mixpanel event tracked:', eventName, properties);
